@@ -18,6 +18,7 @@
 </template>
 <script>
 import * as AuthServices from '../services/AuthService'
+import {store} from '../store/'
 export default {
     data() {
         return {
@@ -33,6 +34,12 @@ export default {
             
             result.then(response => response.data)
             .then(response => {
+                console.log(response);
+                if (!response.context.error){
+                    localStorage.setItem("authToken", response.context.data.token)
+                    store.commit("initUser", response.context.data.user)
+                    store.commit("checkAuth")
+                }
                 this.$router.push("/")
             })
             .catch(err => console.log(err))

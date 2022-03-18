@@ -7,17 +7,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAuth">
           <router-link to="/profile" class="nav-link" aria-current="page" href="#">Profile</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!isAuth">
           <router-link to="/login" class="nav-link" href="#">Login</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!isAuth">
           <router-link to="/sign-up" class="nav-link" href="#">Sign Up</router-link>
         </li>
-        <li class="nav-item">
-          <router-link @click.prevent="logout" to="/logout" class="nav-link" href="#">Logout</router-link>
+        <li class="nav-item" v-if="isAuth">
+          <a @click.prevent="logout" class="nav-link" href="#">Logout</a>
         </li>
       </ul>
     </div>
@@ -25,11 +25,38 @@
 </nav>
 </template>
 <script>
+import ENV from '../ENV'
+import router from '../router'
+import {store} from '../store'
 export default {
-    methods:{
-        logout(){
-            
-        }
+  data(){
+    return {
+      
     }
+  },
+  computed:{
+    isAuth() {
+      return store.getters.auth
+    }
+  },
+  methods:{
+    logout(){
+      axios.post(`${ENV.BASE_URL}logout`, {}, {
+        headers:{
+          "Authorization": "Bearer " + localStorage.getItem("authToken")
+        }
+      })
+      .then(response => response.data)
+      .then(response => {
+        if (response != null && !response.context.error) {
+          localStorage.removeItem("authToken")
+          store.commit("initUser", null)
+          store.commit("checkAuth")
+          this.$router.push("/login")
+        }
+      })
+
+    }
+  }
 }
 </script>

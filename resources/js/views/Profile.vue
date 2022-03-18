@@ -14,9 +14,12 @@ export default {
     },
     methods:{
         loadUserData(){
-            axios.get(`${ENV.BASE_URL}user`, {},{
-                withCredentials: true
-            }).then(response => response.data)
+            axios.get(`${ENV.BASE_URL}user`, {
+                headers:{
+                    "Authorization": "Bearer " + localStorage.getItem("authToken")
+                }
+            })
+            .then(response => response.data)
             .then(response => {
                 this.user = response
             })
