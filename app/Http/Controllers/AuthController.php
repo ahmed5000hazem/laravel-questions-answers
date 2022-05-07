@@ -47,4 +47,9 @@ class AuthController extends Controller
         }
         return $this->getResponse("login failed", "invalid email or password", true);
     }
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return $this->getResponse("logged out...", "", false);
+    }
 }

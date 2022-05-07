@@ -39,8 +39,8 @@ export default {
                     localStorage.setItem("authToken", response.context.data.token)
                     store.commit("initUser", response.context.data.user)
                     store.commit("checkAuth")
+                    this.$router.push("/")
                 }
-                this.$router.push("/")
             })
             .catch(err => console.log(err))
         }

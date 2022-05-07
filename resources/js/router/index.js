@@ -4,7 +4,9 @@ import {store} from '../store'
 import {createRouter, createWebHistory, RouterView, RouterLink } from 'vue-router'
 import Home from '../views/Home'
 import Login from '../views/Login'
-import Profile from '../views/Profile'
+import Answers from '../views/Answers'
+import Questions from '../views/Questions'
+import FullQuestion from '../views/FullQuestion'
 import SignUp from '../views/SignUp'
 
 
@@ -42,22 +44,35 @@ const routes = [
         }
     },
     {
-        path: '/profile',
-        name: 'profile',
-        component: Profile,
+        path: '/questions',
+        name: 'questions',
+        component: Questions,
         meta:{
             middleware:[auth]
         }
-    }
+    },
+    {
+        path: '/full-question/:id',
+        name: 'fullQuestion',
+        component: FullQuestion,
+        meta:{
+            middleware:[auth]
+        }
+    },
+    {
+        path: '/answers',
+        name: 'answers',
+        component: Answers,
+        meta:{
+            middleware:[auth]
+        }
+    },
 ]
-
-
 
 const router = new createRouter({
     history: History,
     routes
 })
-
 router.beforeEach((to, from, next) => {
     if (!to.meta.middleware) {
         return next()
